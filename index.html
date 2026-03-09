@@ -1,620 +1,432 @@
 <!DOCTYPE html>
-<html lang="bn">
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2026 by anonymous (http://jsbin.com/lepenosuzu/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Step Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #0a0a12;
-      --surface: #13131f;
-      --card: #1a1a2e;
-      --border: #2a2a4a;
-      --accent1: #7c5cfc;
-      --accent2: #fc5c7d;
-      --accent3: #43e97b;
-      --accent4: #f9a825;
-      --text: #e8e8f5;
-      --muted: #8888aa;
+      --bg: #0a0a12; --surface: #13131f; --card: #1a1a2e; --border: #2a2a4a;
+      --accent1: #7c5cfc; --accent2: #fc5c7d; --accent3: #43e97b; --accent4: #f9a825;
+      --text: #e8e8f5; --muted: #8888aa;
     }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem 4rem;
-      position: relative;
-      overflow-x: hidden;
+      background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      padding: 2rem 1rem 4rem; position: relative; overflow-x: hidden;
     }
-
     body::before {
-      content: '';
-      position: fixed;
-      top: -200px; left: 50%;
-      transform: translateX(-50%);
+      content: ''; position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
       width: 700px; height: 500px;
       background: radial-gradient(ellipse, rgba(124,92,252,0.18) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
-
-    .wrapper {
-      width: 100%;
-      max-width: 480px;
-      position: relative;
-      z-index: 1;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-      animation: fadeDown 0.6s ease both;
-    }
-
-    header .badge {
+    .wrapper { width: 100%; max-width: 480px; position: relative; z-index: 1; }
+    header { text-align: center; margin-bottom: 1.5rem; animation: fadeDown 0.6s ease both; }
+    .badge {
       display: inline-block;
       background: linear-gradient(135deg, var(--accent1), var(--accent2));
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.3em 1em;
-      border-radius: 100px;
-      margin-bottom: 1rem;
+      color: #fff; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; padding: 0.3em 1em; border-radius: 100px; margin-bottom: 0.9rem;
     }
-
     header h1 {
-      font-size: 2.4rem;
-      font-weight: 900;
+      font-size: 2.4rem; font-weight: 900;
       background: linear-gradient(135deg, #fff 40%, var(--accent1));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.1;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1.1;
     }
-
-    header h1 span {
-      font-family: 'Tiro Bangla', serif;
-      font-size: 1.5rem;
-      display: block;
-      background: linear-gradient(135deg, var(--muted), #ccc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-top: 0.3rem;
-      font-weight: 400;
+    header h1 sub {
+      font-size: 1rem; font-weight: 400; display: block;
+      background: linear-gradient(135deg, var(--muted), #bbb);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-top: 0.4rem; letter-spacing: 0.02em;
     }
-
+    .dev-credit { text-align: center; margin-bottom: 1.8rem; animation: fadeDown 0.7s ease 0.05s both; }
+    .dev-inner {
+      display: inline-flex; flex-direction: column; align-items: center; gap: 0.25rem;
+      background: linear-gradient(135deg, rgba(124,92,252,0.08), rgba(252,92,125,0.05));
+      border: 1px solid rgba(124,92,252,0.22); border-radius: 14px; padding: 0.7rem 1.5rem;
+    }
+    .dev-name { font-size: 0.9rem; font-weight: 700; color: #bbb; letter-spacing: 0.02em; }
+    .dev-name strong {
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; font-weight: 900;
+    }
+    .dev-tg { font-size: 0.8rem; color: var(--muted); }
+    .dev-tg a { color: #7cb9fc; text-decoration: none; font-weight: 600; }
+    .dev-tg a:hover { color: #a8d4ff; }
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 1.8rem;
-      margin-bottom: 1.5rem;
-      animation: fadeUp 0.6s ease both;
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 1.8rem; margin-bottom: 1.5rem; animation: fadeUp 0.6s ease both;
       box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03);
     }
-
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    label .bn {
-      font-family: 'Tiro Bangla', serif;
-      font-size: 0.85rem;
-      text-transform: none;
-      letter-spacing: 0;
-      color: var(--text);
-      display: block;
-      margin-top: 0.1rem;
-    }
-
+    .field-group { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .field-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .field-label span { font-size: 0.78rem; text-transform: none; letter-spacing: 0; color: var(--text); display: block; margin-top: 0.1rem; font-weight: 400; }
     input[type="number"] {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 600;
-      padding: 0.8rem 1.1rem;
-      width: 100%;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      -moz-appearance: textfield;
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px;
+      color: var(--text); font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 600;
+      padding: 0.8rem 1.1rem; width: 100%; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s; -moz-appearance: textfield;
     }
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
-    input[type="number"]:focus {
-      border-color: var(--accent1);
-      box-shadow: 0 0 0 3px rgba(124,92,252,0.2);
-    }
-
-    .multiply-row {
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
-
+    input[type="number"]:focus { border-color: var(--accent1); box-shadow: 0 0 0 3px rgba(124,92,252,0.2); }
+    .multiply-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
     .mul-btn {
-      flex: 1;
-      min-width: 52px;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      color: var(--muted);
-      font-family: 'Outfit', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 0.65rem 0.5rem;
-      cursor: pointer;
-      transition: all 0.18s;
-      text-align: center;
+      flex: 1; min-width: 52px; background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 10px; color: var(--muted); font-family: 'Outfit', sans-serif;
+      font-size: 1rem; font-weight: 700; padding: 0.65rem 0.5rem; cursor: pointer;
+      transition: all 0.18s; text-align: center;
     }
-
     .mul-btn:hover { border-color: var(--accent1); color: var(--text); }
     .mul-btn.active {
       background: linear-gradient(135deg, var(--accent1), #5b3fd4);
-      border-color: var(--accent1);
-      color: #fff;
-      box-shadow: 0 4px 18px rgba(124,92,252,0.35);
+      border-color: var(--accent1); color: #fff; box-shadow: 0 4px 18px rgba(124,92,252,0.35);
     }
-
-    .custom-mul {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+    .custom-mul { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .custom-lbl { font-size: 0.82rem; white-space: nowrap; color: var(--muted); font-weight: 600; }
+    .custom-mul input { font-size: 1rem; padding: 0.55rem 0.8rem; width: 110px; }
+    .warn-box {
+      background: linear-gradient(135deg, rgba(252,92,125,0.1), rgba(252,92,125,0.04));
+      border: 1.5px solid rgba(252,92,125,0.35); border-radius: 14px;
+      padding: 0.9rem 1.1rem; margin-bottom: 1rem; font-size: 0.88rem; color: #f5a0b0; line-height: 1.6;
     }
-
-    .custom-mul label {
-      text-transform: none;
-      letter-spacing: 0;
-      font-size: 0.82rem;
-      white-space: nowrap;
-      color: var(--muted);
+    .warn-box strong { color: var(--accent2); font-weight: 700; }
+    .fix-btn {
+      display: inline-block; margin-top: 0.55rem;
+      background: rgba(252,92,125,0.18); border: 1px solid rgba(252,92,125,0.4);
+      border-radius: 8px; color: #fc9ab0; font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem; font-weight: 700; padding: 0.35em 0.9em; cursor: pointer;
+      transition: background 0.2s;
     }
-
-    .custom-mul input {
-      font-size: 1rem;
-      padding: 0.55rem 0.8rem;
-      width: 110px;
-    }
-
+    .fix-btn:hover { background: rgba(252,92,125,0.28); }
     .btn-calc {
-      width: 100%;
-      padding: 1rem;
+      width: 100%; padding: 1rem;
       background: linear-gradient(135deg, var(--accent1) 0%, #5b3fd4 100%);
-      color: #fff;
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      letter-spacing: 0.04em;
+      color: #fff; font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700;
+      border: none; border-radius: 14px; cursor: pointer; letter-spacing: 0.04em;
       transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 6px 24px rgba(124,92,252,0.4);
-      margin-bottom: 0.8rem;
+      box-shadow: 0 6px 24px rgba(124,92,252,0.4); margin-bottom: 0.8rem;
     }
     .btn-calc:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 10px 30px rgba(124,92,252,0.5); }
     .btn-calc:active { transform: scale(0.98); }
-
     .btn-img {
-      width: 100%;
-      padding: 0.85rem;
-      background: linear-gradient(135deg, #4a4a7a, #2a2a4a);
-      color: #ccc;
-      font-family: 'Outfit', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
+      width: 100%; padding: 0.85rem;
+      background: linear-gradient(135deg, #4a4a7a, #2a2a4a); color: #ccc;
+      font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 600;
+      border: 1.5px solid var(--border); border-radius: 14px; cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center;
     }
     .btn-img:hover { background: linear-gradient(135deg, #5a5a9a, #3a3a6a); color: #fff; }
-
     #results { animation: fadeUp 0.5s ease both; }
-
     .result-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.5rem;
     }
-    .result-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .steps-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-      margin-bottom: 1rem;
-    }
-
+    .result-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .steps-list { display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1rem; }
     .step-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.75rem 1.1rem;
+      display: flex; align-items: center; gap: 1rem; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 1.1rem;
       animation: slideIn 0.35s ease both;
     }
-
     .step-num {
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent1);
-      background: rgba(124,92,252,0.12);
-      border-radius: 6px;
-      padding: 0.2em 0.6em;
-      white-space: nowrap;
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--accent1); background: rgba(124,92,252,0.12);
+      border-radius: 6px; padding: 0.2em 0.6em; white-space: nowrap;
     }
-
-    .step-amount {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-left: auto;
-    }
-
-    .step-bar-wrap {
-      flex: 1;
-      height: 4px;
-      background: var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
+    .step-amount { font-size: 1.15rem; font-weight: 700; color: var(--text); margin-left: auto; }
+    .step-bar-wrap { flex: 1; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
     .step-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent1), var(--accent2));
-      border-radius: 4px;
-      transition: width 0.6s cubic-bezier(.4,0,.2,1);
+      height: 100%; background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      border-radius: 4px; transition: width 0.6s cubic-bezier(.4,0,.2,1);
     }
-
     .total-box {
       background: linear-gradient(135deg, rgba(67,233,123,0.12), rgba(67,233,123,0.04));
-      border: 1.5px solid rgba(67,233,123,0.3);
-      border-radius: 14px;
-      padding: 1rem 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.6rem;
+      border: 1.5px solid rgba(67,233,123,0.3); border-radius: 14px;
+      padding: 1rem 1.2rem; display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 0.6rem;
     }
-
-    .total-box .lbl { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--accent3); }
+    .total-box .lbl { font-size: 0.95rem; font-weight: 600; color: var(--accent3); }
     .total-box .val { font-size: 1.4rem; font-weight: 900; color: var(--accent3); }
-
     .remain-box {
       background: linear-gradient(135deg, rgba(249,168,37,0.12), rgba(249,168,37,0.04));
-      border: 1.5px solid rgba(249,168,37,0.3);
-      border-radius: 14px;
-      padding: 1rem 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      border: 1.5px solid rgba(249,168,37,0.3); border-radius: 14px;
+      padding: 1rem 1.2rem; display: flex; align-items: center; justify-content: space-between;
     }
-
-    .remain-box .lbl { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--accent4); }
+    .remain-box .lbl { font-size: 0.95rem; font-weight: 600; color: var(--accent4); }
     .remain-box .val { font-size: 1.4rem; font-weight: 900; color: var(--accent4); }
-
     .hidden { display: none !important; }
-
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-12px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-
-    #capture-area {
-      position: fixed;
-      left: -9999px;
-      top: -9999px;
-    }
-
-    .dev-credit {
-      text-align: center;
-      margin-bottom: 1.8rem;
-      animation: fadeDown 0.8s ease both;
-      animation-delay: 0.05s;
-    }
-
-    .dev-credit .dev-inner {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.3rem;
-      background: linear-gradient(135deg, rgba(124,92,252,0.08), rgba(252,92,125,0.06));
-      border: 1px solid rgba(124,92,252,0.25);
-      border-radius: 14px;
-      padding: 0.75rem 1.5rem;
-    }
-
-    .dev-credit .dev-name {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #ccc;
-      letter-spacing: 0.03em;
-    }
-
-    .dev-credit .dev-name strong {
-      background: linear-gradient(135deg, var(--accent1), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 900;
-    }
-
-    .dev-credit .dev-tg {
-      font-size: 0.82rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .dev-credit .dev-tg a {
-      color: #7cb9fc;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .dev-credit .dev-tg a:hover {
-      color: #a8d4ff;
-    }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
+    #capture-area { position: fixed; left: -9999px; top: -9999px; }
   </style>
 </head>
 <body>
-
 <div class="wrapper">
   <header>
-    <div class="badge">💹 Financial Tool</div>
-    <h1>Step Calculator
-      <span>স্টেপ হিসাব করুন</span>
-    </h1>
+    <div class="badge">Financial Tool</div>
+    <h1>Step Calculator <sub>Calculate in steps</sub></h1>
   </header>
 
   <div class="dev-credit">
     <div class="dev-inner">
-      <div class="dev-name">Developed by — <strong>Afnan Samin</strong></div>
-      <div class="dev-tg">✈️ Telegram: <a href="https://t.me/afnan633" target="_blank">@afnan633</a></div>
+      <div class="dev-name">Developed by &mdash; <strong>Afnan Samin</strong></div>
+      <div class="dev-tg">Telegram: <a href="https://t.me/afnan633" target="_blank">@afnan633</a></div>
     </div>
   </div>
 
   <div class="card" style="animation-delay:0.1s">
     <div class="field-group">
-
       <div class="field">
-        <label>Amount <span class="bn">মোট পরিমাণ (টাকা)</span></label>
-        <input type="number" id="amount" placeholder="যেমন: 10000" min="0" step="any" />
+        <div class="field-label">Amount <span>Total amount (Taka)</span></div>
+        <input type="number" id="amount" placeholder="e.g. 10000" min="0" step="any" />
       </div>
-
       <div class="field">
-        <label>Steps <span class="bn">মোট স্টেপ সংখ্যা</span></label>
-        <input type="number" id="steps" placeholder="যেমন: 3" min="1" max="20" step="1" value="3" />
+        <div class="field-label">Steps <span>Number of steps (1-20)</span></div>
+        <input type="number" id="steps" placeholder="e.g. 3" min="1" max="20" step="1" value="3" />
       </div>
-
       <div class="field">
-        <label>Multiply <span class="bn">প্রতি স্টেপে কতগুণ বাড়বে</span></label>
+        <div class="field-label">Multiply <span>How many times each step multiplies</span></div>
         <div class="multiply-row" id="mul-btns">
-          <button class="mul-btn" data-val="1.5">×1.5</button>
-          <button class="mul-btn active" data-val="2">×2</button>
-          <button class="mul-btn" data-val="2.5">×2.5</button>
-          <button class="mul-btn" data-val="3">×3</button>
-          <button class="mul-btn" data-val="4">×4</button>
+          <button class="mul-btn" data-val="1.5">x1.5</button>
+          <button class="mul-btn active" data-val="2">x2</button>
+          <button class="mul-btn" data-val="2.5">x2.5</button>
+          <button class="mul-btn" data-val="3">x3</button>
+          <button class="mul-btn" data-val="4">x4</button>
         </div>
         <div class="custom-mul">
-          <label>কাস্টম মান:</label>
-          <input type="number" id="custom-mul" placeholder="যেমন: 1.8" min="1.01" step="0.01" />
+          <span class="custom-lbl">Custom:</span>
+          <input type="number" id="custom-mul" placeholder="e.g. 1.8" min="1.01" step="0.01" />
         </div>
       </div>
-
     </div>
 
-    <button class="btn-calc" onclick="calculate()">🧮 Calculate</button>
-    <button class="btn-img" onclick="downloadImage()">🖨️ Download as Image</button>
+    <div class="warn-box hidden" id="warn-box">
+      <div id="warn-text"></div>
+      <button class="fix-btn hidden" id="fix-btn" onclick="applyMaxSteps()">Use suggested steps</button>
+    </div>
+
+    <button class="btn-calc" onclick="calculate()">Calculate</button>
+    <button class="btn-img" onclick="downloadImage()">Download as Image</button>
   </div>
 
-  <div class="card hidden" id="results" style="animation-delay:0.05s">
+  <div class="card hidden" id="results">
     <div class="result-label">Step by Step</div>
     <div class="steps-list" id="steps-list"></div>
     <div class="total-box">
-      <span class="lbl">✅ মোট যোগফল:</span>
-      <span class="val" id="total-val">—</span>
+      <span class="lbl">Total Amount:</span>
+      <span class="val" id="total-val">-</span>
     </div>
     <div style="height:0.6rem"></div>
     <div class="remain-box">
-      <span class="lbl">💵 বাকি ব্যালেন্স:</span>
-      <span class="val" id="remain-val">—</span>
+      <span class="lbl">Remaining Balance:</span>
+      <span class="val" id="remain-val">-</span>
     </div>
   </div>
 </div>
 
 <div id="capture-area"></div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-  let selectedMul = 2;
+  var selectedMul = 2;
+  var suggestedMax = 0;
 
-  document.querySelectorAll('.mul-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.mul-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mul-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.mul-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       selectedMul = parseFloat(btn.dataset.val);
       document.getElementById('custom-mul').value = '';
+      checkWarn();
     });
   });
 
   document.getElementById('custom-mul').addEventListener('input', function() {
-    const v = parseFloat(this.value);
+    var v = parseFloat(this.value);
     if (!isNaN(v) && v > 1) {
-      document.querySelectorAll('.mul-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.mul-btn').forEach(function(b) { b.classList.remove('active'); });
       selectedMul = v;
+      checkWarn();
     }
   });
 
-  function fmt(n) {
-    return Math.floor(n).toLocaleString('en-BD');
+  document.getElementById('amount').addEventListener('input', checkWarn);
+  document.getElementById('steps').addEventListener('input', checkWarn);
+
+  function getMaxValidSteps(amount, mul) {
+    if (!amount || amount <= 0 || !mul || mul <= 1) return 0;
+    // Find the highest n where floor(step1) >= 1
+    // step1 = amount / sum_of_weights = amount / ((mul^n - 1) / (mul - 1))
+    for (var n = 20; n >= 1; n--) {
+      var weightSum = 0;
+      for (var i = 0; i < n; i++) weightSum += Math.pow(mul, i);
+      var step1 = amount / weightSum;
+      if (Math.floor(step1) >= 1) return n;
+    }
+    return 0;
   }
 
-  function fmtFull(n) {
-    // For total and remain: show exact original amount
-    return n.toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function checkWarn() {
+    var amount = parseFloat(document.getElementById('amount').value);
+    var steps = parseInt(document.getElementById('steps').value);
+    var warnBox = document.getElementById('warn-box');
+    var warnText = document.getElementById('warn-text');
+    var fixBtn = document.getElementById('fix-btn');
+
+    if (isNaN(amount) || isNaN(steps)) { warnBox.classList.add('hidden'); return; }
+
+    var maxValid = getMaxValidSteps(amount, selectedMul);
+    suggestedMax = maxValid;
+
+    if (maxValid === 0) {
+      warnBox.classList.remove('hidden');
+      fixBtn.classList.add('hidden');
+      warnText.innerHTML = '<strong>Warning:</strong> Amount is too small for even 1 step at x' + selectedMul + ' multiply. Please increase the amount.';
+    } else if (steps > maxValid) {
+      warnBox.classList.remove('hidden');
+      fixBtn.classList.remove('hidden');
+      var diff = steps - maxValid;
+      warnText.innerHTML =
+        '<strong>Warning:</strong> With ' + amount.toLocaleString('en-BD') + ' Tk at x' + selectedMul +
+        ' multiply, the first ' + diff + ' step' + (diff > 1 ? 's' : '') + ' will show 0 Tk. ' +
+        'Maximum valid steps: <strong>' + maxValid + '</strong>';
+    } else {
+      warnBox.classList.add('hidden');
+    }
   }
 
-  function calculateSteps(amount, steps, mul) {
-    // Step 1 weight = 1, Step 2 = mul, Step 3 = mul^2, ...
-    let weights = [];
-    for (let i = 0; i < steps; i++) weights.push(Math.pow(mul, i));
-    const weightSum = weights.reduce((a, b) => a + b, 0);
-    const base = amount / weightSum;
-    return weights.map(w => w * base);
+  function applyMaxSteps() {
+    if (suggestedMax > 0) {
+      document.getElementById('steps').value = suggestedMax;
+      checkWarn();
+    }
   }
+
+  function calcAmounts(amount, steps, mul) {
+    var weights = [], weightSum = 0;
+    for (var i = 0; i < steps; i++) {
+      var w = Math.pow(mul, i);
+      weights.push(w);
+      weightSum += w;
+    }
+    var base = amount / weightSum;
+    return weights.map(function(w) { return w * base; });
+  }
+
+  function fmtInt(n) { return Math.floor(n).toLocaleString('en-BD'); }
+  function fmtFull(n) { return n.toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
   function calculate() {
-    const amount = parseFloat(document.getElementById('amount').value);
-    const steps = parseInt(document.getElementById('steps').value);
-    const mul = selectedMul;
+    var amount = parseFloat(document.getElementById('amount').value);
+    var mul = selectedMul;
 
-    if (isNaN(amount) || amount <= 0) { alert('সঠিক পরিমাণ দিন!'); return; }
-    if (isNaN(steps) || steps < 1 || steps > 20) { alert('স্টেপ ১ থেকে ২০ এর মধ্যে দিন!'); return; }
-    if (isNaN(mul) || mul <= 1) { alert('মাল্টিপ্লাই ১-এর বেশি দিন! (যেমন: 2)'); return; }
+    if (isNaN(amount) || amount <= 0) { alert('Please enter a valid amount.'); return; }
+    if (isNaN(mul) || mul <= 1) { alert('Please select a multiply value greater than 1.'); return; }
 
-    const stepAmounts = calculateSteps(amount, steps, mul);
-    const total = stepAmounts.reduce((a, b) => a + b, 0);
-    const remain = amount - total;
-    const maxStep = Math.max(...stepAmounts);
+    var maxValid = getMaxValidSteps(amount, mul);
+    if (maxValid === 0) { alert('Amount is too small. Please increase the amount.'); return; }
 
-    const list = document.getElementById('steps-list');
+    var steps = parseInt(document.getElementById('steps').value);
+    if (isNaN(steps) || steps < 1) { alert('Please enter a valid step count.'); return; }
+
+    if (steps > maxValid) {
+      steps = maxValid;
+      document.getElementById('steps').value = maxValid;
+      checkWarn();
+    }
+
+    var stepAmounts = calcAmounts(amount, steps, mul);
+    var total = stepAmounts.reduce(function(a, b) { return a + b; }, 0);
+    var remain = amount - total;
+    var maxAmt = Math.max.apply(null, stepAmounts);
+
+    var list = document.getElementById('steps-list');
     list.innerHTML = '';
-
-    stepAmounts.forEach((amt, i) => {
-      const pct = (amt / maxStep) * 100;
-      const el = document.createElement('div');
+    stepAmounts.forEach(function(amt, i) {
+      var pct = (amt / maxAmt) * 100;
+      var el = document.createElement('div');
       el.className = 'step-item';
       el.style.animationDelay = (i * 0.07) + 's';
-      el.innerHTML = `
-        <span class="step-num">Step ${i + 1}</span>
-        <div class="step-bar-wrap">
-          <div class="step-bar" style="width:0%" data-pct="${pct.toFixed(1)}"></div>
-        </div>
-        <span class="step-amount">${fmt(amt)} ৳</span>
-      `;
+      el.innerHTML =
+        '<span class="step-num">Step ' + (i+1) + '</span>' +
+        '<div class="step-bar-wrap"><div class="step-bar" style="width:0%" data-pct="' + pct.toFixed(1) + '"></div></div>' +
+        '<span class="step-amount">' + fmtInt(amt) + ' Tk</span>';
       list.appendChild(el);
     });
 
-    document.getElementById('total-val').textContent = fmtFull(total) + ' ৳';
-    document.getElementById('remain-val').textContent = fmtFull(Math.abs(remain)) + ' ৳';
+    document.getElementById('total-val').textContent = fmtFull(total) + ' Tk';
+    document.getElementById('remain-val').textContent = fmtFull(Math.abs(remain)) + ' Tk';
     document.getElementById('results').classList.remove('hidden');
 
-    setTimeout(() => {
-      document.querySelectorAll('.step-bar').forEach(bar => {
-        bar.style.width = bar.dataset.pct + '%';
-      });
+    setTimeout(function() {
+      document.querySelectorAll('.step-bar').forEach(function(b) { b.style.width = b.dataset.pct + '%'; });
     }, 80);
 
     document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function downloadImage() {
-    const amount = parseFloat(document.getElementById('amount').value);
-    const steps = parseInt(document.getElementById('steps').value);
-    const mul = selectedMul;
-
-    if (isNaN(amount) || isNaN(steps) || document.getElementById('results').classList.contains('hidden')) {
-      alert('আগে Calculate করুন!'); return;
+    var amount = parseFloat(document.getElementById('amount').value);
+    var mul = selectedMul;
+    if (isNaN(amount) || document.getElementById('results').classList.contains('hidden')) {
+      alert('Please calculate first.'); return;
     }
+    var maxValid = getMaxValidSteps(amount, mul);
+    var steps = Math.min(parseInt(document.getElementById('steps').value), maxValid);
+    var stepAmounts = calcAmounts(amount, steps, mul);
+    var total = stepAmounts.reduce(function(a, b) { return a + b; }, 0);
+    var remain = amount - total;
 
-    const stepAmounts = calculateSteps(amount, steps, mul);
-    const total = stepAmounts.reduce((a, b) => a + b, 0);
-    const remain = amount - total;
+    var stepsHTML = stepAmounts.map(function(amt, i) {
+      return '<div style="background:#eef0ff;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">' +
+        '<span style="color:#5b3fd4;font-weight:700;font-size:0.9rem;">Step ' + (i+1) + '</span>' +
+        '<span style="font-weight:700;font-size:1rem;color:#222;">' + fmtInt(amt) + ' Tk</span>' +
+        '</div>';
+    }).join('');
 
-    const ca = document.getElementById('capture-area');
-    let stepsHTML = stepAmounts.map((amt, i) => `
-      <div style="background:#eef0ff;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
-        <span style="color:#5b3fd4;font-weight:700;font-size:0.9rem;">Step ${i+1}</span>
-        <span style="font-weight:700;font-size:1rem;color:#222;">${fmt(amt)} ৳</span>
-      </div>
-    `).join('');
+    var ca = document.getElementById('capture-area');
+    ca.innerHTML =
+      '<div style="font-family:Outfit,sans-serif;background:#fff;border-radius:16px;padding:1.4rem;width:340px;border:1px solid #e0e0ef;">' +
+        '<h2 style="text-align:center;font-size:1.3rem;font-weight:900;margin-bottom:0.3rem;color:#222;">Step Calculator</h2>' +
+        '<p style="text-align:center;font-size:0.72rem;color:#aaa;margin-bottom:1rem;">Developed by Afnan Samin | @afnan633</p>' +
+        '<div style="background:#f5f5fb;border-radius:10px;padding:9px 14px;margin-bottom:6px;display:flex;justify-content:space-between;">' +
+          '<span style="color:#888;font-size:0.85rem;">Amount</span>' +
+          '<span style="font-weight:700;color:#222;">' + fmtFull(amount) + ' Tk</span>' +
+        '</div>' +
+        '<div style="background:#f5f5fb;border-radius:10px;padding:9px 14px;margin-bottom:14px;display:flex;justify-content:space-between;">' +
+          '<span style="color:#888;font-size:0.85rem;">Steps x Multiply</span>' +
+          '<span style="font-weight:700;color:#222;">' + steps + ' x ' + mul + '</span>' +
+        '</div>' +
+        '<div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:8px;">Step by Step:</div>' +
+        stepsHTML +
+        '<div style="background:#e8fef2;border:1.5px solid #43e97b;border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+          '<span style="color:#27a760;font-weight:700;">Total Amount:</span>' +
+          '<span style="font-weight:900;font-size:1.1rem;color:#27a760;">' + fmtFull(total) + ' Tk</span>' +
+        '</div>' +
+        '<div style="background:#fff8e1;border:1.5px solid #f9a825;border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">' +
+          '<span style="color:#c77800;font-weight:700;">Remaining Balance:</span>' +
+          '<span style="font-weight:900;font-size:1.1rem;color:#c77800;">' + fmtFull(Math.abs(remain)) + ' Tk</span>' +
+        '</div>' +
+      '</div>';
 
-    ca.innerHTML = `
-      <div style="font-family:'Outfit',sans-serif;background:#fff;border-radius:16px;padding:1.4rem;width:340px;border:1px solid #e0e0ef;">
-        <h2 style="text-align:center;font-size:1.3rem;font-weight:900;margin-bottom:1rem;color:#222;">Step হিসাব করুন</h2>
-        <div style="background:#f5f5fb;border-radius:10px;padding:9px 14px;margin-bottom:6px;display:flex;justify-content:space-between;">
-          <span style="color:#888;font-size:0.85rem;">Amount</span>
-          <span style="font-weight:700;color:#222;">${fmtFull(amount)} ৳</span>
-        </div>
-        <div style="background:#f5f5fb;border-radius:10px;padding:9px 14px;margin-bottom:14px;display:flex;justify-content:space-between;">
-          <span style="color:#888;font-size:0.85rem;">Steps × Multiply</span>
-          <span style="font-weight:700;color:#222;">${steps} × ${mul}</span>
-        </div>
-        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:8px;">Step by Step:</div>
-        ${stepsHTML}
-        <div style="background:#e8fef2;border:1.5px solid #43e97b;border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="color:#27a760;font-weight:700;">✅ মোট যোগফল:</span>
-          <span style="font-weight:900;font-size:1.1rem;color:#27a760;">${fmtFull(total)} ৳</span>
-        </div>
-        <div style="background:#fff8e1;border:1.5px solid #f9a825;border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
-          <span style="color:#c77800;font-weight:700;">💵 বাকি ব্যালেন্স:</span>
-          <span style="font-weight:900;font-size:1.1rem;color:#c77800;">${fmtFull(Math.abs(remain))} ৳</span>
-        </div>
-      </div>
-    `;
-
-    html2canvas(ca, { backgroundColor: null, scale: 2 }).then(canvas => {
-      const link = document.createElement('a');
+    html2canvas(ca, { backgroundColor: null, scale: 2 }).then(function(canvas) {
+      var link = document.createElement('a');
       link.download = 'step-calculator.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
