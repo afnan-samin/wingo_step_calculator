@@ -1,13 +1,4 @@
 <!DOCTYPE html>
-<!--
-Created using JS Bin
-http://jsbin.com
-
-Copyright (c) 2026 by anonymous (http://jsbin.com/lepenosuzu/1/edit)
-
-Released under the MIT license: http://jsbin.mit-license.org
--->
-<meta name="robots" content="noindex">
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -17,7 +8,7 @@ Released under the MIT license: http://jsbin.mit-license.org
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0a0a12; --surface: #13131f; --card: #1a1a2e; --border: #2a2a4a;
+      --bg: #0a0a12; --surface: #13131f; --card: #9000000; --border: #2a2a4a;
       --accent1: #7c5cfc; --accent2: #fc5c7d; --accent3: #43e97b; --accent4: #f9a825;
       --text: #e8e8f5; --muted: #8888aa;
     }
@@ -25,6 +16,7 @@ Released under the MIT license: http://jsbin.mit-license.org
       background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif;
       min-height: 100vh; display: flex; flex-direction: column; align-items: center;
       padding: 2rem 1rem 4rem; position: relative; overflow-x: hidden;
+      color-scheme: light only;
     }
     body::before {
       content: ''; position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
@@ -32,6 +24,28 @@ Released under the MIT license: http://jsbin.mit-license.org
       background: radial-gradient(ellipse, rgba(124,92,252,0.18) 0%, transparent 70%);
       pointer-events: none; z-index: 0;
     }
+
+    /* Watermark */
+    .hist-watermark {
+      position: fixed; top: 0; left: 0; right: 0;
+      bottom: 0;
+      pointer-events: none; z-index: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hist-watermark-text {
+      font-family: "Times New Roman", Times, serif;
+      font-size: clamp(32px, 8vw, 72px);
+      font-weight: bold;
+      color: rgba(183, 247, 6, 0.363);
+      white-space: nowrap;
+      transform: rotate(-35deg);
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      user-select: none;
+    }
+    
+    
     .wrapper { width: 100%; max-width: 480px; position: relative; z-index: 1; }
     header { text-align: center; margin-bottom: 1.5rem; animation: fadeDown 0.6s ease both; }
     .badge {
@@ -140,16 +154,18 @@ Released under the MIT license: http://jsbin.mit-license.org
     .result-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .steps-list { display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1rem; }
     .step-item {
-      display: flex; align-items: center; gap: 1rem; background: var(--surface);
+      display: flex; flex-direction: column; gap: 0.5rem; background: var(--surface);
       border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 1.1rem;
       animation: slideIn 0.35s ease both;
     }
+    .step-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
     .step-num {
       font-size: 0.7rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
       color: var(--accent1); background: rgba(124,92,252,0.12);
       border-radius: 6px; padding: 0.2em 0.6em; white-space: nowrap;
     }
-    .step-amount { font-size: 1.15rem; font-weight: 700; color: var(--text); margin-left: auto; }
+    .step-amount { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+    .step-footer { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 1rem; }
     .step-bar-wrap { flex: 1; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
     .step-bar {
       height: 100%; background: linear-gradient(90deg, var(--accent1), var(--accent2));
@@ -178,19 +194,22 @@ Released under the MIT license: http://jsbin.mit-license.org
   </style>
 </head>
 <body>
+
+<div class="hist-watermark" aria-hidden="true">
+    <span class="hist-watermark-text">AFNAN SAMIN</span>
+</div>
+
 <div class="wrapper">
   <header>
     <div class="badge">Financial Tool</div>
-    <h1>Wingo Step Calculator <sub>Calculate in steps</sub></h1>
+    <h1>WinGO Step Calculator<sub>Calculate in steps</sub></h1>
   </header>
-
   <div class="dev-credit">
     <div class="dev-inner">
       <div class="dev-name">Developed by &mdash; <strong>Afnan Samin</strong></div>
       <div class="dev-tg">Telegram: <a href="https://t.me/afnan633" target="_blank">@afnan633</a></div>
     </div>
   </div>
-
   <div class="card" style="animation-delay:0.1s">
     <div class="field-group">
       <div class="field">
@@ -205,26 +224,23 @@ Released under the MIT license: http://jsbin.mit-license.org
         <div class="field-label">Multiply <span>How many times each step multiplies</span></div>
         <div class="multiply-row" id="mul-btns">
           <button class="mul-btn active" data-val="2">x2</button>
-          <button class="mul-btn" data-val="2.5">x2.5</button>
           <button class="mul-btn" data-val="3">x3</button>
           <button class="mul-btn" data-val="4">x4</button>
+          <button class="mul-btn" data-val="5">x5</button>
         </div>
         <div class="custom-mul">
           <span class="custom-lbl">Custom:</span>
-          <input type="number" id="custom-mul" placeholder="e.g. 1.8" min="1.01" step="0.01" />
+          <input type="number" id="custom-mul" placeholder="e.g. 2.5" min="1.01" step="0.01" />
         </div>
       </div>
     </div>
-
     <div class="warn-box hidden" id="warn-box">
       <div id="warn-text"></div>
       <button class="fix-btn hidden" id="fix-btn" onclick="applyMaxSteps()">Use suggested steps</button>
     </div>
-
     <button class="btn-calc" onclick="calculate()">Calculate</button>
     <button class="btn-img" onclick="downloadImage()">Download as Image</button>
   </div>
-
   <div class="card hidden" id="results">
     <div class="result-label">Step by Step</div>
     <div class="steps-list" id="steps-list"></div>
@@ -239,13 +255,14 @@ Released under the MIT license: http://jsbin.mit-license.org
     </div>
   </div>
 </div>
-
 <div id="capture-area"></div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <script>
   var selectedMul = 2;
   var suggestedMax = 0;
-
+  
   document.querySelectorAll('.mul-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.mul-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -270,8 +287,6 @@ Released under the MIT license: http://jsbin.mit-license.org
 
   function getMaxValidSteps(amount, mul) {
     if (!amount || amount <= 0 || !mul || mul <= 1) return 0;
-    // Find the highest n where floor(step1) >= 1
-    // step1 = amount / sum_of_weights = amount / ((mul^n - 1) / (mul - 1))
     for (var n = 20; n >= 1; n--) {
       var weightSum = 0;
       for (var i = 0; i < n; i++) weightSum += Math.pow(mul, i);
@@ -287,12 +302,9 @@ Released under the MIT license: http://jsbin.mit-license.org
     var warnBox = document.getElementById('warn-box');
     var warnText = document.getElementById('warn-text');
     var fixBtn = document.getElementById('fix-btn');
-
     if (isNaN(amount) || isNaN(steps)) { warnBox.classList.add('hidden'); return; }
-
     var maxValid = getMaxValidSteps(amount, selectedMul);
     suggestedMax = maxValid;
-
     if (maxValid === 0) {
       warnBox.classList.remove('hidden');
       fixBtn.classList.add('hidden');
@@ -332,51 +344,66 @@ Released under the MIT license: http://jsbin.mit-license.org
   function fmtFull(n) { return n.toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
   function calculate() {
-    var amount = parseFloat(document.getElementById('amount').value);
+    var amountInput = document.getElementById('amount');
+    var amount = parseFloat(amountInput.value);
     var mul = selectedMul;
-
     if (isNaN(amount) || amount <= 0) { alert('Please enter a valid amount.'); return; }
-    if (isNaN(mul) || mul <= 1) { alert('Please select a multiply value greater than 1.'); return; }
-
-    var maxValid = getMaxValidSteps(amount, mul);
-    if (maxValid === 0) { alert('Amount is too small. Please increase the amount.'); return; }
-
-    var steps = parseInt(document.getElementById('steps').value);
+    
+    var stepsInput = document.getElementById('steps');
+    var steps = parseInt(stepsInput.value);
     if (isNaN(steps) || steps < 1) { alert('Please enter a valid step count.'); return; }
-
+    
+    var maxValid = getMaxValidSteps(amount, mul);
     if (steps > maxValid) {
       steps = maxValid;
-      document.getElementById('steps').value = maxValid;
-      checkWarn();
+      stepsInput.value = maxValid;
     }
 
     var stepAmounts = calcAmounts(amount, steps, mul);
     var total = stepAmounts.reduce(function(a, b) { return a + b; }, 0);
     var remain = amount - total;
     var maxAmt = Math.max.apply(null, stepAmounts);
-
     var list = document.getElementById('steps-list');
     list.innerHTML = '';
+    
+    var cumulativeInvestment = 0;
+
     stepAmounts.forEach(function(amt, i) {
+      var pctOfTotal = ((amt / amount) * 100).toFixed(1);
+      var stepVal = Math.floor(amt);
+      
+      // Return: (Amount - 2%) * 2
+      var winVal = (stepVal - (stepVal * 0.02)) * 2;
+      // Win: Return - Current Step - All previous steps
+      var netWin = winVal - stepVal - cumulativeInvestment;
+      cumulativeInvestment += stepVal;
+
       var pct = (amt / maxAmt) * 100;
       var el = document.createElement('div');
       el.className = 'step-item';
       el.style.animationDelay = (i * 0.07) + 's';
+      
       el.innerHTML =
-        '<span class="step-num">Step ' + (i+1) + '</span>' +
-        '<div class="step-bar-wrap"><div class="step-bar" style="width:0%" data-pct="' + pct.toFixed(1) + '"></div></div>' +
-        '<span class="step-amount">' + fmtInt(amt) + ' Tk</span>';
+        '<div class="step-header">' +
+          '<span class="step-num">Step ' + (i+1) + ' (' + pctOfTotal + '%)</span>' +
+          '<span class="step-amount">' + fmtInt(amt) + ' Tk</span>' +
+        '</div>' +
+        '<div class="step-footer" style="flex-direction: column; align-items: flex-start; gap: 4px;">' +
+          '<div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">' +
+            '<div class="step-bar-wrap" style="flex: 1;"><div class="step-bar" style="width:0%" data-pct="' + pct.toFixed(1) + '"></div></div>' +
+            '<div style="font-size:0.85rem; color:var(--accent3); font-weight:700; margin-left:10px; white-space:nowrap;">Return: ' + winVal.toLocaleString('en-BD', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</div>' +
+          '</div>' +
+          '<div style="font-size:0.8rem; color:#43e97b; font-weight:600; align-self: flex-end;">Win: ' + netWin.toLocaleString('en-BD', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</div>' +
+        '</div>';
       list.appendChild(el);
     });
 
     document.getElementById('total-val').textContent = fmtFull(total) + ' Tk';
     document.getElementById('remain-val').textContent = fmtFull(Math.abs(remain)) + ' Tk';
     document.getElementById('results').classList.remove('hidden');
-
     setTimeout(function() {
       document.querySelectorAll('.step-bar').forEach(function(b) { b.style.width = b.dataset.pct + '%'; });
     }, 80);
-
     document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -386,17 +413,29 @@ Released under the MIT license: http://jsbin.mit-license.org
     if (isNaN(amount) || document.getElementById('results').classList.contains('hidden')) {
       alert('Please calculate first.'); return;
     }
-    var maxValid = getMaxValidSteps(amount, mul);
-    var steps = Math.min(parseInt(document.getElementById('steps').value), maxValid);
+    var steps = parseInt(document.getElementById('steps').value);
     var stepAmounts = calcAmounts(amount, steps, mul);
     var total = stepAmounts.reduce(function(a, b) { return a + b; }, 0);
     var remain = amount - total;
-
+    
+    var cumulativeInvImg = 0;
     var stepsHTML = stepAmounts.map(function(amt, i) {
-      return '<div style="background:#eef0ff;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">' +
-        '<span style="color:#5b3fd4;font-weight:700;font-size:0.9rem;">Step ' + (i+1) + '</span>' +
-        '<span style="font-weight:700;font-size:1rem;color:#222;">' + fmtInt(amt) + ' Tk</span>' +
-        '</div>';
+      var pctOfTotal = ((amt / amount) * 100).toFixed(1);
+      var stepVal = Math.floor(amt);
+      var winVal = (stepVal - (stepVal * 0.02)) * 2;
+      var netWin = winVal - stepVal - cumulativeInvImg;
+      cumulativeInvImg += stepVal;
+      
+      return '<div style="background:#eef0ff; border-radius:10px; padding:10px 14px; margin-bottom:8px;">' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+          '<span style="color:#5b3fd4; font-weight:700; font-size:0.85rem;">Step ' + (i+1) + ' (' + pctOfTotal + '%)</span>' +
+          '<span style="font-weight:700; font-size:1rem; color:#222;">' + fmtInt(amt) + ' Tk</span>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700;">' +
+          '<span style="color:#666;">Win: ' + netWin.toLocaleString('en-BD', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Tk</span>' +
+          '<span style="color:#27a760;">Return: ' + winVal.toLocaleString('en-BD', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Tk</span>' +
+        '</div>' +
+      '</div>';
     }).join('');
 
     var ca = document.getElementById('capture-area');
@@ -412,7 +451,6 @@ Released under the MIT license: http://jsbin.mit-license.org
           '<span style="color:#888;font-size:0.85rem;">Steps x Multiply</span>' +
           '<span style="font-weight:700;color:#222;">' + steps + ' x ' + mul + '</span>' +
         '</div>' +
-        '<div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:8px;">Step by Step:</div>' +
         stepsHTML +
         '<div style="background:#e8fef2;border:1.5px solid #43e97b;border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
           '<span style="color:#27a760;font-weight:700;">Total Amount:</span>' +
@@ -423,7 +461,6 @@ Released under the MIT license: http://jsbin.mit-license.org
           '<span style="font-weight:900;font-size:1.1rem;color:#c77800;">' + fmtFull(Math.abs(remain)) + ' Tk</span>' +
         '</div>' +
       '</div>';
-
     html2canvas(ca, { backgroundColor: null, scale: 2 }).then(function(canvas) {
       var link = document.createElement('a');
       link.download = 'step-calculator.png';
