@@ -158,6 +158,18 @@
       border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 1.1rem;
       animation: slideIn 0.35s ease both;
     }
+    .tab-row {
+  display: flex; gap: 0.5rem; margin-bottom: 1rem; width: 100%;
+}
+.tab-btn {
+  flex: 1; padding: 0.8rem; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--muted); cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-weight: 700; transition: all 0.2s;
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  color: #fff; border: none;
+}
     .step-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
     .step-num {
       font-size: 0.7rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
@@ -210,7 +222,31 @@
       <div class="dev-tg">Telegram: <a href="https://t.me/afnan633" target="_blank">@afnan633</a></div>
     </div>
   </div>
+  <div class="tab-row">
+  <button class="tab-btn active" onclick="switchTab('step')">Step Calculator</button>
+  <button class="tab-btn" onclick="switchTab('compound')">Compound Calculator</button>
+</div>
   <div class="card" style="animation-delay:0.1s">
+  
+  <div id="compound-ui" class="hidden">
+    <div class="field-group">
+      <div class="field">
+        <div class="field-label">Principal Amount <span>Initial investment</span></div>
+        <input type="number" id="c-amount" placeholder="e.g. 1000" />
+      </div>
+      <div class="field">
+        <div class="field-label">Daily Percent (%) <span>Interest rate per day</span></div>
+        <input type="number" id="c-percent" placeholder="e.g. 15" />
+      </div>
+      <div class="field">
+        <div class="field-label">Duration (Days) <span>Total days to compound</span></div>
+        <input type="number" id="c-days" placeholder="e.g. 30" />
+      </div>
+    </div>
+    <button class="btn-calc" onclick="calculateCompound()">Calculate Compound</button>
+  </div>
+
+  <div id="step-ui">
     <div class="field-group">
       <div class="field">
         <div class="field-label">Amount <span>Total amount (Taka)</span></div>
@@ -221,7 +257,7 @@
         <input type="number" id="steps" placeholder="e.g. 5" min="1" max="20" step="1" />
       </div>
       <div class="field">
-        <div class="field-label">Multiply <span>How many times each step multiplies</span></div>
+        <div class="field-label">Multiply <span>How many times multiplies</span></div>
         <div class="multiply-row" id="mul-btns">
           <button class="mul-btn" data-val="2">x2</button>
           <button class="mul-btn active" data-val="3">x3</button>
@@ -234,13 +270,17 @@
         </div>
       </div>
     </div>
+
     <div class="warn-box hidden" id="warn-box">
       <div id="warn-text"></div>
       <button class="fix-btn hidden" id="fix-btn" onclick="applyMaxSteps()">Use suggested steps</button>
     </div>
-    <button class="btn-calc" onclick="calculate()">Calculate</button>
-    <button class="btn-img" onclick="downloadImage()">Download as Image</button>
+
+    <button class="btn-calc" onclick="calculate()">Calculate Steps</button>
   </div>
+
+  <button class="btn-img" onclick="downloadImage()">Download as Image</button>
+</div>
   <div class="card hidden" id="results">
     <div class="result-label">Step by Step</div>
     <div class="steps-list" id="steps-list"></div>
@@ -502,6 +542,61 @@
         link.click();
     });
 }
+
+function switchTab(type) {
+  const stepUI = document.getElementById('step-ui'); // আপনার বর্তমান ফিল্ডগুলোকে একটি ডিভ-এ মুড়িয়ে নিন
+  const compoundUI = document.getElementById('compound-ui');
+  const tabs = document.querySelectorAll('.tab-btn');
+
+  tabs.forEach(t => t.classList.remove('active'));
+  
+  if(type === 'step') {
+    stepUI.classList.remove('hidden');
+    compoundUI.classList.add('hidden');
+    tabs[0].classList.add('active');
+  } else {
+    stepUI.classList.add('hidden');
+    compoundUI.classList.remove('hidden');
+    tabs[1].classList.add('active');
+  }
+}
+
+function calculateCompound() {
+  const p = parseFloat(document.getElementById('c-amount').value);
+  const r = parseFloat(document.getElementById('c-percent').value) / 100;
+  const n = parseInt(document.getElementById('c-days').value);
+
+  if (isNaN(p) || isNaN(r) || isNaN(n)) {
+    alert("Please fill all fields"); return;
+  }
+
+  // Compound Interest Formula: A = P(1 + r)^n
+  const total = p * Math.pow((1 + r), n);
+  const profit = total - p;
+
+  // রেজাল্ট দেখানোর জন্য আপনি বর্তমান results ডিভ ব্যবহার করতে পারেন
+  const list = document.getElementById('steps-list');
+  list.innerHTML = `
+    <div class="step-item">
+      <div style="color:var(--accent1); font-weight:800; margin-bottom:10px;">COMPOUND SUMMARY</div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+        <span>Initial Investment:</span> <span>${p.toLocaleString()} Tk</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+        <span>Total Profit:</span> <span style="color:var(--accent3);">${profit.toLocaleString(undefined, {maximumFractionDigits:2})} Tk</span>
+      </div>
+      <hr style="border:0.5px solid var(--border); margin:10px 0;">
+      <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:900;">
+        <span>Total Balance:</span> <span style="color:var(--accent1);">${total.toLocaleString(undefined, {maximumFractionDigits:2})} Tk</span>
+      </div>
+    </div>
+  `;
+  document.getElementById('results').classList.remove('hidden');
+  document.getElementById('total-val').textContent = total.toLocaleString() + ' Tk';
+  document.getElementById('remain-val').textContent = 'N/A';
+}
+
+
 </script>
 </body>
 </html>
